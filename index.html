@@ -12,10 +12,15 @@
       <section id="addEventBtn">
         <button id="addEvent"><span class="text">Add Event</span></button>
       </section>
+      <section id="events-container">
+
+      </section>
       <section id="form">
-        <form action="#" class="formDisplay">
+        <form action="#" class="formDisplay" @onsubmit="">
           <label for="name" class="darkmode">Name :</label>
           <input type="text" name="name" id="eventName" />
+          <label for="name" class="darkmode">Author :</label>
+          <input type="text" name="name" id="eventAuthor" />
           <label for="description" class="darkmode">Description :</label>
           <textarea
             id="eventDescription"
@@ -24,14 +29,14 @@
           ></textarea>
           <label for="date">Date :</label>
           <input type="date" id="eventDate" name="eventDate" />
-          <button type="submit" class="button" id="eventSubmit">
-            <span class="text"> Create event </span>
-          </button>
           <label for="availability">Availability :</label>
           <select id="availability">
-            <option value="yes">Yes</option>
-            <option value="no">No</option>
+            <option value="true">Yes</option>
+            <option value="false">No</option>
           </select>
+          <button class="button" id="eventSubmit">
+            <span class="text"> Create event </span>
+          </button>
           <button class="button" id="closeBtn">
             <span class="text">Close</span>
           </button>
