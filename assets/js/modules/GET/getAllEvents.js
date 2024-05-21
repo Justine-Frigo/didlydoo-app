@@ -1,3 +1,3 @@
-export function getAllTasks() {
+export function getAllEvents() {
         
 } 
