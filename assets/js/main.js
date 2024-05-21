@@ -174,5 +174,11 @@ function resetForm(nameInput, authorInput, descriptionInput, dateInput) {
   dateInput.value = "";
 }
 
+// Updating/patching an event
+// We have to add an event to our edit buttons (see the delete ones above) and use the function below - to be adapted of course
+async function patchEvent(eventId, name, author, description) {
+    await updateEvent(eventId, name, author, description);
+}
+
 // We trigger the function which displays the events once the JS module is loaded
 await displayEvents();

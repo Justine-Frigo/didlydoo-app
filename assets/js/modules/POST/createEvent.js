@@ -5,6 +5,7 @@ export async function createEvent(name, dates, author, description) {
         author: author,
         description: description
     }
+    
     try {
         const response = await fetch(`http://localhost:3000/api/events`, {
             method: 'POST',
