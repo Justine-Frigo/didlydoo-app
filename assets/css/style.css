@@ -1,0 +1,114 @@
+@import url("https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap");
+* {
+  margin: 0;
+  font-family: "Poppins", sans-serif;
+  background-color: rgb(29, 29, 29);
+  color: white;
+}
+
+#addEvent {
+  margin: 4em 0em 0em 4em;
+  align-items: center;
+  background-image: linear-gradient(144deg, #af40ff, #5b42f3 50%, #00ddeb);
+  border: none;
+  border-radius: 5em 1.5em;
+  box-shadow: rgba(151, 65, 252, 0.2) 0 15px 30px -5px;
+  box-sizing: border-box;
+  color: #ffffff;
+  display: flex;
+  font-size: 1em;
+  justify-content: center;
+  line-height: 1em;
+  max-width: 100%;
+  min-width: 9em;
+  padding: 0.2em;
+  text-decoration: none;
+  -moz-user-select: none;
+       user-select: none;
+  -webkit-user-select: none;
+  touch-action: manipulation;
+  white-space: nowrap;
+  cursor: pointer;
+}
+#addEvent:active {
+  outline: 0;
+}
+#addEvent span {
+  padding: 16px 24px;
+  border-radius: 6px;
+  width: 100%;
+  height: 100%;
+  transition: 300ms;
+}
+#addEvent span:hover {
+  background: none;
+}
+
+.button {
+  align-items: center;
+  background-image: linear-gradient(144deg, #af40ff, #5b42f3 50%, #00ddeb);
+  border: none;
+  border-radius: 8px;
+  box-shadow: rgba(151, 65, 252, 0.2) 0 15px 30px -5px;
+  box-sizing: border-box;
+  color: #ffffff;
+  display: flex;
+  font-size: 1em;
+  justify-content: center;
+  line-height: 1em;
+  max-width: 100%;
+  min-width: 140px;
+  padding: 3px;
+  text-decoration: none;
+}
+.button:hover {
+  background-color: rgb(29, 29, 29);
+}
+.button:active {
+  outline: 0;
+}
+.button span {
+  background-color: rgb(29, 29, 30);
+  padding: 0.1em;
+  border-radius: 6px;
+  width: 100%;
+  height: 100%;
+  transition: 300ms;
+}
+.button span:hover {
+  background: none;
+}
+
+#closeBtn {
+  width: 9em;
+  margin: 2em 0em 0em 6.5em;
+}
+
+input,
+textarea {
+  border: 1px;
+  border-radius: 1em;
+  border-color: rgba(255, 255, 255, 0.3843137255);
+  background-color: rgba(255, 255, 255, 0.037);
+}
+
+.formDisplay {
+  transform: translate(-0.5em);
+  text-align: center;
+  display: grid;
+  gap: 1em;
+  visibility: hidden;
+  -webkit-backdrop-filter: blur(4em);
+          backdrop-filter: blur(4em);
+}
+
+@media screen and (min-width: 480px) {
+  .addEventBtn {
+    font-size: 24px;
+    min-width: 196px;
+  }
+  #closeBtn {
+    width: 9em;
+    margin-left: 10em;
+  }
+}/*# sourceMappingURL=style.css.map */
