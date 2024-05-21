@@ -1,5 +1,4 @@
 ////////// GET //////////
-
 import { getAllAttendees } from "./modules/GET/getAllAttendees.js";
 import { getAllEvents } from "./modules/GET/getAllEvents.js";
 import { getAttendeeByName } from "./modules/GET/getAttendeeByName.js";
@@ -17,11 +16,18 @@ import { updateEvent } from "./modules/PATCH/updateEvent.js";
 ////////// DELETE //////////
 import { deleteEvent } from "./modules/DELETE/deleteEvent.js";
 
+////////// VARIABLES / DOM ELEMENTS //////////
 const addEventBtn = document.getElementById("addEvent");
 const closeBtn = document.getElementById("closeBtn");
 const form = document.querySelector("form");
+const name = document.getElementById("eventName");
+const author = document.getElementById("eventAuthor");
+const description = document.getElementById("eventDescription");
+const dateInputValue = document.getElementById("eventDate");
+const eventSubmitBtn = document.getElementById("eventSubmit");
 let display = false;
 
+// FORM OPENING
 addEventBtn.addEventListener("click", (e) => {
   e.preventDefault();
   if (!display) {
@@ -35,6 +41,7 @@ addEventBtn.addEventListener("click", (e) => {
   }
 });
 
+// FORM CLOSING
 closeBtn.addEventListener("click", (e) => {
   e.preventDefault();
   form.style.visibility = "hidden";
@@ -44,6 +51,7 @@ closeBtn.addEventListener("click", (e) => {
   display = false;
 });
 
+// DISPLAYING EVENTS AS CARDS
 async function displayEvents() {
   const events = await getAllEvents();
   const attendees = await getAllAttendees();
@@ -51,6 +59,7 @@ async function displayEvents() {
 
   const eventsContainer = document.getElementById("events-container");
 
+  // Looping over each event to create a card for each
   events.forEach((event) => {
     const eventCard = document.createElement("article");
     const eventCardHeader = document.createElement("section");
@@ -70,6 +79,7 @@ async function displayEvents() {
 
     const dates = event.dates;
 
+    // Looping over each dates to append them to their container
     dates.forEach((date) => {
       const dateContainer = document.createElement("div");
       dateContainer.className = "date-availability";
@@ -80,6 +90,7 @@ async function displayEvents() {
 
       const attendees = date.attendees;
 
+      // Looping over each attendee to append them to the date container (using flex - hi Angel)
       attendees.forEach((attendee) => {
         const attendeeContainer = document.createElement("p");
         attendeeContainer.innerText = attendee.name;
@@ -97,6 +108,12 @@ async function displayEvents() {
     deleteBtn.innerText = "Delete event";
     eventCard.appendChild(deleteBtn);
 
+    const editBtn = document.createElement("button");
+    editBtn.className = "editBtn";
+    editBtn.innerText = "Edit event";
+    eventCard.appendChild(editBtn);
+
+    // Triggering a confirm box before deleting the event - event managed directly in the loop for ease purposes
     deleteBtn.addEventListener("click", async (e) => {
       e.preventDefault();
 
@@ -110,11 +127,7 @@ async function displayEvents() {
   });
 }
 
-const name = document.getElementById("eventName");
-const author = document.getElementById("eventAuthor");
-const description = document.getElementById("eventDescription");
-const dateInputValue = document.getElementById("eventDate");
-
+// Creating a new event
 async function addNewEvent() {
   const datesArray = [];
   const date = new Date(dateInputValue.value);
@@ -122,6 +135,7 @@ async function addNewEvent() {
   console.log(datesArray);
   const availability = document.getElementById("availability");
 
+  // Sanitizing inputs - thanks Angel
   if (
     name.value.trim() === "" ||
     description.value.trim() === "" ||
@@ -133,14 +147,14 @@ async function addNewEvent() {
   }
 
   try {
+    // Actually calling the API to create an event
     await createEvent(name.value, datesArray, author.value, description.value);
   } catch (error) {
     console.error(error);
   }
 }
 
-const eventSubmitBtn = document.getElementById("eventSubmit");
-
+// Event listener to fire the API call
 eventSubmitBtn.addEventListener("click", async (e) => {
   e.preventDefault();
   console.log(e);
@@ -152,6 +166,7 @@ eventSubmitBtn.addEventListener("click", async (e) => {
   }
 });
 
+// We reset the form each time we open it, because the Go live extension forces the reload, avoiding us to actually reset the form once the call is done
 function resetForm(nameInput, authorInput, descriptionInput, dateInput) {
   nameInput.value = "";
   authorInput.value = "";
@@ -159,4 +174,5 @@ function resetForm(nameInput, authorInput, descriptionInput, dateInput) {
   dateInput.value = "";
 }
 
+// We trigger the function which displays the events once the JS module is loaded
 await displayEvents();
