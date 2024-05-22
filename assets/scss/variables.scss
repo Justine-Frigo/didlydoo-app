@@ -1,5 +1,10 @@
 $boxShadowBtn: rgba(190, 65, 252, 0.2) 0 15px 30px -5px;
 $boxSizingBtn: border-box;
-$bckImgBtn: linear-gradient(144deg, #aaedf2, #b148b1 50%, #eb002f);
+$bckImgBtn: linear-gradient(
+  144deg,
+  rgb(131, 196, 210),
+  #b148b1 50%,
+  rgb(212, 29, 29)
+);
 $spanColorLight: rgb(236, 237, 248);
 $spanColorDark: black;

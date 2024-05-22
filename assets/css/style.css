@@ -80,7 +80,7 @@ main {
   margin: 4em 0em 4em 0em;
   color: black;
   align-items: center;
-  background-image: linear-gradient(144deg, #aaedf2, #b148b1 50%, #eb002f);
+  background-image: linear-gradient(144deg, rgb(131, 196, 210), #b148b1 50%, rgb(212, 29, 29));
   border: none;
   border-radius: 5em 1.5em;
   box-shadow: rgba(190, 65, 252, 0.2) 0 15px 30px -5px;
@@ -117,7 +117,7 @@ main {
 
 button {
   align-items: center;
-  background-image: linear-gradient(144deg, #aaedf2, #b148b1 50%, #eb002f);
+  background-image: linear-gradient(144deg, rgb(131, 196, 210), #b148b1 50%, rgb(212, 29, 29));
   color: white;
   border: none;
   border-radius: 8px;
