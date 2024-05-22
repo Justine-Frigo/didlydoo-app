@@ -65,11 +65,11 @@ let currentEventId = null;
 async function displayEvents() {
   const events = await getAllEvents();
   const attendees = await getAllAttendees();
-  console.log("Events after update:", events);
-  console.log(attendees);
+  // console.log("Events after update:", events);
+  // console.log(attendees);
 
   const eventsContainer = document.getElementById("events-container");
-  eventsContainer.innerHTML = ''; //Clear the container before displaying events
+  // eventsContainer.innerHTML = ''; //Clear the container before displaying events
 
   // Looping over each event to create a card for each
   events.forEach((event) => {
@@ -225,6 +225,7 @@ eventSubmitBtn.addEventListener("click", async (e) => {
         description: description.value,
         dates: datesArray,
       });
+      console.log(datesArray);
       await patchEvent(
         currentEventId,
         name.value,
@@ -249,10 +250,20 @@ eventSubmitBtn.addEventListener("click", async (e) => {
 
 // Updating/patching an event
 async function patchEvent(eventId, name, author, description, dates) {
+  console.log('dates', dates) 
   try {
     console.log("Updating event with id:", eventId);
     console.log("New values:", { name, author, description, dates });
-    await updateEvent(eventId, name, dates, author, description);
+    await updateEvent(eventId, name, author, description);
+
+    if (dates) {
+      try {
+        console.log('test removing dates', dates)
+        await addDates(eventId, dates)
+      } catch (error) {
+        console.error(error)
+      }
+    }
   } catch (error) {
     console.error("Failed to update event:", error);
   }

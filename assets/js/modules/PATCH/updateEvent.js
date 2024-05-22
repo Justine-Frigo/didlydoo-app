@@ -1,9 +1,8 @@
 export async function updateEvent(eventId, name, author, description) {
     const event = {
         name: name,
-        dates: dates,
         author: author,
-        description: description
+        description: description,
     }
     
     try {
