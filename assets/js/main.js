@@ -258,7 +258,6 @@ async function patchEvent(eventId, name, author, description, dates) {
 
     if (dates) {
       try {
-        console.log('test removing dates', dates)
         await addDates(eventId, dates)
       } catch (error) {
         console.error(error)
@@ -279,6 +278,16 @@ function resetForm(nameInput, authorInput, descriptionInput, dateInput) {
   datesContainer.innerHTML = '';
   currentEventId = null;
   eventSubmitBtn.innerText = "Create Event";
+}
+
+
+// SKELETON TO ADD ATTENDANCE - TO BE COMPLETED
+async function addAttendanceToEvent(eventId, name, dates, availability) {
+  try {
+    return await addAttendance(eventId, name, dates, availability)
+  } catch (error) {
+    console.error(error)
+  }
 }
 
 // Initial load of events
