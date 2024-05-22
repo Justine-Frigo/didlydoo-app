@@ -51,13 +51,17 @@ closeBtn.addEventListener("click", (e) => {
   display = false;
 });
 
+let currentEventId = null;
+
 // DISPLAYING EVENTS AS CARDS
 async function displayEvents() {
   const events = await getAllEvents();
   const attendees = await getAllAttendees();
+  console.log("Events after update:", events);
   console.log(attendees);
 
   const eventsContainer = document.getElementById("events-container");
+  eventsContainer.innerHTML = ''; //Clear the container before displaying events
 
   // Looping over each event to create a card for each
   events.forEach((event) => {
@@ -123,9 +127,33 @@ async function displayEvents() {
       }
     });
 
+    editBtn.addEventListener("click", (e) => {
+      e.preventDefault();
+      openEditForm(event);
+    });
+
     eventsContainer.appendChild(eventCard);
   });
 }
+
+function openEditForm(event) {
+  form.style.visibility = "visible";
+  form.style.height = "auto";
+  form.style.opacity = "1";
+  form.style.padding = "5em";
+  display = true;
+
+  name.value = event.name;
+  author.value = event.author;
+  description.value = event.description;
+  dateInputValue.value = new Date(event.dates[0].date).toISOString().split('T')[0]; // Assuming there's at least one date
+
+  currentEventId = event.id;
+  eventSubmitBtn.innerText = "Update Event";
+
+  console.log("Editing event:", event);
+}
+
 
 // Creating a new event
 async function addNewEvent() {
@@ -157,14 +185,34 @@ async function addNewEvent() {
 // Event listener to fire the API call
 eventSubmitBtn.addEventListener("click", async (e) => {
   e.preventDefault();
-  console.log(e);
   try {
-    await addNewEvent();
+    if (currentEventId) {
+      console.log("Submitting update for event id:", currentEventId);
+      console.log("Form values:", {
+        name: name.value,
+        author: author.value,
+        description: description.value,
+        date: dateInputValue.value,
+      });
+      await patchEvent(currentEventId, name.value, author.value, description.value, dateInputValue.value);
+    } else {
+      console.log("Creating new event");
+      await addNewEvent();
+    }
     await displayEvents();
+    resetForm(name, author, description, dateInputValue);
+    form.style.visibility = "hidden";
+    form.style.opacity = "0";
+    form.style.height = "0";
+    form.style.padding = "0";
+    display = false;
+    currentEventId = null;
+    eventSubmitBtn.innerText = "Create Event";
   } catch (error) {
-    console.error(error);
+    console.error("Failed to submit event:", error);
   }
 });
+
 
 // We reset the form each time we open it, because the Go live extension forces the reload, avoiding us to actually reset the form once the call is done
 function resetForm(nameInput, authorInput, descriptionInput, dateInput) {
@@ -172,13 +220,23 @@ function resetForm(nameInput, authorInput, descriptionInput, dateInput) {
   authorInput.value = "";
   descriptionInput.value = "";
   dateInput.value = "";
+  currentEventId = null;
+  eventSubmitBtn.innerText = "Create Event";
 }
 
 // Updating/patching an event
 // We have to add an event to our edit buttons (see the delete ones above) and use the function below - to be adapted of course
-async function patchEvent(eventId, name, author, description) {
-    await updateEvent(eventId, name, author, description);
+async function patchEvent(eventId, name, author, description, date) {
+  const datesArray = [new Date(date)];
+  try {
+    console.log("Updating event with id:", eventId);
+    console.log("New values:", { name, author, description, datesArray });
+    await updateEvent(eventId, name, datesArray, author, description);
+  } catch (error) {
+    console.error("Failed to update event:", error);
+  }
 }
+
 
 // We trigger the function which displays the events once the JS module is loaded
 await displayEvents();
