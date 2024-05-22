@@ -105,13 +105,23 @@ async function displayEvents() {
 
     const deleteBtn = document.createElement("button");
     deleteBtn.className = "deleteBtn";
-    deleteBtn.innerText = "Delete event";
+    // deleteBtn.innerText = "Delete event";
     eventCard.appendChild(deleteBtn);
 
     const editBtn = document.createElement("button");
     editBtn.className = "editBtn";
-    editBtn.innerText = "Edit event";
+    // editBtn.innerText = "Edit event";
     eventCard.appendChild(editBtn);
+
+    const spanEditBtn = document.createElement("span");
+    spanEditBtn.className = "text";
+    spanEditBtn.innerText = "Edit event";
+    editBtn.appendChild(spanEditBtn);
+
+    const spanDeleteBtn = document.createElement("span");
+    spanDeleteBtn.className = "text";
+    spanDeleteBtn.innerText = "Delete event";
+    deleteBtn.appendChild(spanDeleteBtn);
 
     // Triggering a confirm box before deleting the event - event managed directly in the loop for ease purposes
     deleteBtn.addEventListener("click", async (e) => {
@@ -177,7 +187,7 @@ function resetForm(nameInput, authorInput, descriptionInput, dateInput) {
 // Updating/patching an event
 // We have to add an event to our edit buttons (see the delete ones above) and use the function below - to be adapted of course
 async function patchEvent(eventId, name, author, description) {
-    await updateEvent(eventId, name, author, description);
+  await updateEvent(eventId, name, author, description);
 }
 
 // We trigger the function which displays the events once the JS module is loaded
