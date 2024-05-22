@@ -115,6 +115,11 @@ async function displayEvents() {
     });
     eventCard.appendChild(eventDates);
 
+    const addAttendeeBtn = document.createElement("button");
+    addAttendeeBtn.className = "addAttendeeBtn";
+    addAttendeeBtn.innerText = "add attendance";
+    eventCard.appendChild(addAttendeeBtn);
+
     const deleteBtn = document.createElement("button");
     deleteBtn.className = "deleteBtn";
     deleteBtn.innerText = "Delete event";
