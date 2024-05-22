@@ -1,46 +1,46 @@
 nav {
-    display: flex;
-    justify-content: end;
-    padding-top: 20px;
-    .darkModeDiv {
-        font-size: 24px;
-        cursor: pointer;
-        caret-color: transparent;
-        display: block;
-        align-items: center;
-        img{
-            padding-right: 25px;
-            max-height: 30px;
-            height: 85%;
-        }
-        input{
-            display: none;
-        }
-        .img-checked {
-            display: none;
-        }
-        /* If checked, show the checked image */
-        input:checked ~ .img-checked {
-            display: inline;
-        }
-        /* If checked, hide the unchecked image */
-        input:checked ~ .img-unchecked {
-            display: none;
-        }    
+  display: flex;
+  justify-content: end;
+  padding-top: 20px;
+  .darkModeDiv {
+    font-size: 24px;
+    cursor: pointer;
+    caret-color: transparent;
+    display: block;
+    align-items: center;
+    img {
+      padding-right: 25px;
+      max-height: 30px;
+      height: 85%;
     }
+    input {
+      display: none;
+    }
+    .img-checked {
+      display: none;
+    }
+    /* If checked, show the checked image */
+    input:checked ~ .img-checked {
+      display: inline;
+    }
+    /* If checked, hide the unchecked image */
+    input:checked ~ .img-unchecked {
+      display: none;
+    }
+  }
 }
 
-body{
-    &.darkmode {
-        background-color:rgb(236, 237, 248);
-        color: rgb(29, 29, 29);
+body {
+  &.darkmode {
+    background-color: rgb(236, 237, 248);
+    color: rgb(29, 29, 29);
 
-        #events-container {
-            article {
-                border-color: rgb(29, 29, 29);              
-            }
-        }
+    #events-container {
+      article {
+        border-color: rgb(29, 29, 29);
+      }
     }
+  }
 }
 
 // .svgToWhite{

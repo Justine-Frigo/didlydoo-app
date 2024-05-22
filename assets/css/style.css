@@ -50,15 +50,17 @@ body {
   width: 100%;
   position: relative;
   background-color: rgb(29, 29, 29);
+  display: flex;
+  justify-content: center;
 }
 
 #addEvent {
-  margin: 4em 0em 0em 4em;
+  margin: 4em 0em 4em 4em;
   align-items: center;
-  background-image: linear-gradient(144deg, #af40ff, #5b42f3 50%, #00ddeb);
+  background-image: linear-gradient(144deg, #aaedf2, #b148b1 50%, #eb002f);
   border: none;
   border-radius: 5em 1.5em;
-  box-shadow: rgba(151, 65, 252, 0.2) 0 15px 30px -5px;
+  box-shadow: rgba(190, 65, 252, 0.2) 0 15px 30px -5px;
   box-sizing: border-box;
   color: #ffffff;
   display: flex;
@@ -90,12 +92,12 @@ body {
   background: none;
 }
 
-.button {
+button {
   align-items: center;
-  background-image: linear-gradient(144deg, #af40ff, #5b42f3 50%, #00ddeb);
+  background-image: linear-gradient(144deg, #aaedf2, #b148b1 50%, #eb002f);
   border: none;
   border-radius: 8px;
-  box-shadow: rgba(151, 65, 252, 0.2) 0 15px 30px -5px;
+  box-shadow: rgba(190, 65, 252, 0.2) 0 15px 30px -5px;
   box-sizing: border-box;
   color: #ffffff;
   display: flex;
@@ -107,13 +109,13 @@ body {
   padding: 3px;
   text-decoration: none;
 }
-.button:hover {
+button:hover {
   background-color: rgb(29, 29, 29);
 }
-.button:active {
+button:active {
   outline: 0;
 }
-.button span {
+button span {
   background-color: rgb(29, 29, 30);
   padding: 0.1em;
   border-radius: 6px;
@@ -121,13 +123,8 @@ body {
   height: 100%;
   transition: 300ms;
 }
-.button span:hover {
+button span:hover {
   background: none;
-}
-
-#closeBtn {
-  width: 9em;
-  margin: 2em 0em 0em 6.5em;
 }
 
 input,
@@ -135,7 +132,7 @@ textarea {
   border: 1px;
   border-radius: 1em;
   border-color: rgba(255, 255, 255, 0.3843137255);
-  background-color: rgba(255, 255, 255, 0.37);
+  background-color: rgba(255, 255, 255, 0.256);
 }
 
 #form {
@@ -157,36 +154,50 @@ textarea {
           backdrop-filter: blur(8px);
 }
 
+#events-container {
+  text-align: center;
+}
 #events-container article {
-  border: 1px solid white;
-  padding: 15px;
+  border: 0;
+  border-radius: 2em;
+  margin: 0em 0em 2em 0em;
+  width: 100%;
+  background-color: rgba(128, 128, 128, 0.116);
+  padding: 1.5em;
+  display: grid;
+  justify-content: center;
+}
+#events-container article:nth-child(even) {
+  background-color: rgba(128, 128, 128, 0.192);
 }
 
 .available {
-  color: green;
+  color: rgb(131, 196, 210);
 }
 
 .unavailable {
-  color: red;
+  color: rgba(252, 34, 34, 0.858);
 }
 
 .date-availability {
   display: flex;
   flex-direction: row;
   justify-content: space-around;
+  gap: 3em;
+  margin: 2em 0em 2em 0em;
 }
 
-.deleteBtn, .editBtn {
-  color: black;
+.deleteBtn {
+  margin: 0em 3em 1em 3em;
+}
+
+.editBtn {
+  margin: 0em 3em 1em 3em;
 }
 
 @media screen and (min-width: 480px) {
   .addEventBtn {
     font-size: 24px;
     min-width: 196px;
-  }
-  #closeBtn {
-    width: 9em;
-    margin-left: 10em;
   }
 }/*# sourceMappingURL=style.css.map */

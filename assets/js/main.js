@@ -63,7 +63,7 @@ async function displayEvents() {
   console.log(attendees);
 
   const eventsContainer = document.getElementById("events-container");
-  eventsContainer.innerHTML = ''; //Clear the container before displaying events
+  eventsContainer.innerHTML = ""; //Clear the container before displaying events
 
   // Looping over each event to create a card for each
   events.forEach((event) => {
@@ -111,13 +111,23 @@ async function displayEvents() {
 
     const deleteBtn = document.createElement("button");
     deleteBtn.className = "deleteBtn";
-    deleteBtn.innerText = "Delete event";
+    // deleteBtn.innerText = "Delete event";
     eventCard.appendChild(deleteBtn);
 
     const editBtn = document.createElement("button");
     editBtn.className = "editBtn";
-    editBtn.innerText = "Edit event";
+    // editBtn.innerText = "Edit event";
     eventCard.appendChild(editBtn);
+
+    const spanEditBtn = document.createElement("span");
+    spanEditBtn.className = "text";
+    spanEditBtn.innerText = "Edit event";
+    editBtn.appendChild(spanEditBtn);
+
+    const spanDeleteBtn = document.createElement("span");
+    spanDeleteBtn.className = "text";
+    spanDeleteBtn.innerText = "Delete event";
+    deleteBtn.appendChild(spanDeleteBtn);
 
     // Triggering a confirm box before deleting the event
     deleteBtn.addEventListener("click", async (e) => {
@@ -149,7 +159,7 @@ addDateBtn.addEventListener("click", (e) => {
 });
 
 function displayDates() {
-  datesContainer.innerHTML = '';
+  datesContainer.innerHTML = "";
   datesArray.forEach((date, index) => {
     const dateDiv = document.createElement("div");
     dateDiv.innerText = date.toLocaleDateString("fr-FR");
@@ -174,7 +184,7 @@ function openEditForm(event) {
   name.value = event.name;
   author.value = event.author;
   description.value = event.description;
-  datesArray = event.dates.map(date => new Date(date.date));
+  datesArray = event.dates.map((date) => new Date(date.date));
   displayDates();
 
   currentEventId = event.id;
