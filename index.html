@@ -48,16 +48,20 @@
         <form action="#" class="formDisplay">
           <label for="name" class="darkmode">Name :</label>
           <input type="text" name="name" id="eventName" />
+          <span class="error-slot" id="nameError">name error</span>
           <label for="author" class="darkmode">Author :</label>
           <input type="text" name="author" id="eventAuthor" />
+          <span class="error-slot" id="authorError">author error</span>
           <label for="description" class="darkmode">Description :</label>
           <textarea
             id="eventDescription"
             name="description"
             rows="4"
           ></textarea>
+          <span class="error-slot" id="descriptionError">description error</span>
           <label for="date" class="darkmode">Date :</label>
           <input type="date" id="eventDate" name="eventDate" />
+          <span class="error-slot" id="dateError">date error</span>
           <button class="button" class="darkmode" id="addDateBtn">
             <span class="text" class="darkmode">Add Date</span>
           </button>

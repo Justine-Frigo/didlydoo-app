@@ -75,6 +75,10 @@ main {
   flex-direction: column;
   margin: 0em 4em 0em 3em;
 }
+main .error-slot {
+  color: rgb(241, 41, 101);
+  display: none;
+}
 
 #addEvent {
   margin: 4em 0em 4em 0em;
