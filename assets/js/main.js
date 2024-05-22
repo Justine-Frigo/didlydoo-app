@@ -16,6 +16,9 @@ import { updateEvent } from "./modules/PATCH/updateEvent.js";
 ////////// DELETE //////////
 import { deleteEvent } from "./modules/DELETE/deleteEvent.js";
 
+////////// DARKMODE //////////
+import { darkMode } from './darkmode.js';
+
 ////////// VARIABLES / DOM ELEMENTS //////////
 const addEventBtn = document.getElementById("addEvent");
 const closeBtn = document.getElementById("closeBtn");
@@ -26,6 +29,9 @@ const description = document.getElementById("eventDescription");
 const dateInputValue = document.getElementById("eventDate");
 const eventSubmitBtn = document.getElementById("eventSubmit");
 let display = false;
+
+//DARK MODE SWITCH
+darkMode();
 
 // FORM OPENING
 addEventBtn.addEventListener("click", (e) => {
