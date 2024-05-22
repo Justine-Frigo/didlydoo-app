@@ -8,34 +8,40 @@
     <title>DidlyDoo app</title>
   </head>
   <body>
+    <header>
+      <nav>
+        <label class="darkModeDiv">
+          <label for="theme" class="container"></label>
+          <input id="dark-mode-toggle" class="theme__toggle" type="checkbox" role="switch" name="theme" value="dark">
+           <img class="img-checked" class="svgToWhite" src="assets\img\sun.svg" alt="sun icon" height="50px">
+          <img class="img-unchecked" class="svgToBlack" src="assets\img\moon.svg" alt="moon icon" height="50px">
+      </label> 
+      </nav>
+    </header>
     <main>
       <section id="addEventBtn">
         <button id="addEvent"><span class="text">Add Event</span></button>
       </section>
-      <section id="events-container">
-
-      </section>
+      <section id="events-container"></section>
       <section id="form">
-        <form action="#" class="formDisplay" @onsubmit="">
+        <form action="#" class="formDisplay">
           <label for="name" class="darkmode">Name :</label>
           <input type="text" name="name" id="eventName" />
-          <label for="name" class="darkmode">Author :</label>
-          <input type="text" name="name" id="eventAuthor" />
+          <label for="author" class="darkmode">Author :</label>
+          <input type="text" name="author" id="eventAuthor" />
           <label for="description" class="darkmode">Description :</label>
-          <textarea
-            id="eventDescription"
-            name="description"
-            rows="4"
-          ></textarea>
+          <textarea id="eventDescription" name="description" rows="4"></textarea>
           <label for="date">Date :</label>
           <input type="date" id="eventDate" name="eventDate" />
+          <button id="addDateBtn">Add Date</button>
+          <div id="datesContainer"></div>
           <label for="availability">Availability :</label>
           <select id="availability">
             <option value="true">Yes</option>
             <option value="false">No</option>
           </select>
           <button class="button" id="eventSubmit">
-            <span class="text"> Create event </span>
+            <span class="text">Create event</span>
           </button>
           <button class="button" id="closeBtn">
             <span class="text">Close</span>

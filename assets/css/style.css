@@ -2,10 +2,50 @@
 * {
   margin: 0;
   font-family: "Poppins", sans-serif;
-  color: white;
+}
+
+nav {
+  display: flex;
+  justify-content: end;
+  padding-top: 20px;
+}
+nav .darkModeDiv {
+  font-size: 24px;
+  cursor: pointer;
+  caret-color: transparent;
+  display: block;
+  align-items: center;
+  /* If checked, show the checked image */
+  /* If checked, hide the unchecked image */
+}
+nav .darkModeDiv img {
+  padding-right: 25px;
+  max-height: 30px;
+  height: 85%;
+}
+nav .darkModeDiv input {
+  display: none;
+}
+nav .darkModeDiv .img-checked {
+  display: none;
+}
+nav .darkModeDiv input:checked ~ .img-checked {
+  display: inline;
+}
+nav .darkModeDiv input:checked ~ .img-unchecked {
+  display: none;
+}
+
+body.darkmode {
+  background-color: rgb(236, 237, 248);
+  color: rgb(29, 29, 29);
+}
+body.darkmode #events-container article {
+  border-color: rgb(29, 29, 29);
 }
 
 body {
+  color: white;
   min-height: 100vh;
   width: 100%;
   position: relative;
