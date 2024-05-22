@@ -16,9 +16,6 @@ import { updateEvent } from "./modules/PATCH/updateEvent.js";
 ////////// DELETE //////////
 import { deleteEvent } from "./modules/DELETE/deleteEvent.js";
 
-////////// DARKMODE //////////
-import { darkMode } from './darkmode.js';
-
 ////////// VARIABLES / DOM ELEMENTS //////////
 const addEventBtn = document.getElementById("addEvent");
 const closeBtn = document.getElementById("closeBtn");
@@ -27,11 +24,11 @@ const name = document.getElementById("eventName");
 const author = document.getElementById("eventAuthor");
 const description = document.getElementById("eventDescription");
 const dateInputValue = document.getElementById("eventDate");
+const addDateBtn = document.getElementById("addDateBtn");
+const datesContainer = document.getElementById("datesContainer");
 const eventSubmitBtn = document.getElementById("eventSubmit");
 let display = false;
-
-//DARK MODE SWITCH
-darkMode();
+let datesArray = [];
 
 // FORM OPENING
 addEventBtn.addEventListener("click", (e) => {
@@ -41,8 +38,7 @@ addEventBtn.addEventListener("click", (e) => {
     form.style.height = "auto";
     form.style.opacity = "1";
     form.style.padding = "5em";
-    display = "true";
-    console.log(name.value);
+    display = true;
     resetForm(name, author, description, dateInputValue);
   }
 });
@@ -89,7 +85,7 @@ async function displayEvents() {
 
     const dates = event.dates;
 
-    // Looping over each dates to append them to their container
+    // Looping over each date to append them to their container
     dates.forEach((date) => {
       const dateContainer = document.createElement("div");
       dateContainer.className = "date-availability";
@@ -100,7 +96,7 @@ async function displayEvents() {
 
       const attendees = date.attendees;
 
-      // Looping over each attendee to append them to the date container (using flex - hi Angel)
+      // Looping over each attendee to append them to the date container
       attendees.forEach((attendee) => {
         const attendeeContainer = document.createElement("p");
         attendeeContainer.innerText = attendee.name;
@@ -123,7 +119,7 @@ async function displayEvents() {
     editBtn.innerText = "Edit event";
     eventCard.appendChild(editBtn);
 
-    // Triggering a confirm box before deleting the event - event managed directly in the loop for ease purposes
+    // Triggering a confirm box before deleting the event
     deleteBtn.addEventListener("click", async (e) => {
       e.preventDefault();
 
@@ -142,6 +138,32 @@ async function displayEvents() {
   });
 }
 
+// Add date to the list
+addDateBtn.addEventListener("click", (e) => {
+  e.preventDefault();
+  const dateValue = dateInputValue.value;
+  if (dateValue) {
+    datesArray.push(new Date(dateValue));
+    displayDates();
+  }
+});
+
+function displayDates() {
+  datesContainer.innerHTML = '';
+  datesArray.forEach((date, index) => {
+    const dateDiv = document.createElement("div");
+    dateDiv.innerText = date.toLocaleDateString("fr-FR");
+    const removeBtn = document.createElement("button");
+    removeBtn.innerText = "Remove";
+    removeBtn.addEventListener("click", () => {
+      datesArray.splice(index, 1);
+      displayDates();
+    });
+    dateDiv.appendChild(removeBtn);
+    datesContainer.appendChild(dateDiv);
+  });
+}
+
 function openEditForm(event) {
   form.style.visibility = "visible";
   form.style.height = "auto";
@@ -152,7 +174,8 @@ function openEditForm(event) {
   name.value = event.name;
   author.value = event.author;
   description.value = event.description;
-  dateInputValue.value = new Date(event.dates[0].date).toISOString().split('T')[0]; // Assuming there's at least one date
+  datesArray = event.dates.map(date => new Date(date.date));
+  displayDates();
 
   currentEventId = event.id;
   eventSubmitBtn.innerText = "Update Event";
@@ -160,23 +183,19 @@ function openEditForm(event) {
   console.log("Editing event:", event);
 }
 
-
 // Creating a new event
 async function addNewEvent() {
-  const datesArray = [];
-  const date = new Date(dateInputValue.value);
-  datesArray.push(date);
-  console.log(datesArray);
   const availability = document.getElementById("availability");
 
-  // Sanitizing inputs - thanks Angel
+  // Sanitizing inputs
   if (
     name.value.trim() === "" ||
     description.value.trim() === "" ||
     availability.value === "null" ||
-    author.value.trim() === ""
+    author.value.trim() === "" ||
+    datesArray.length === 0
   ) {
-    alert("Please fill in all fields!");
+    alert("Please fill in all fields and add at least one date!");
     return;
   }
 
@@ -194,55 +213,58 @@ eventSubmitBtn.addEventListener("click", async (e) => {
   try {
     if (currentEventId) {
       console.log("Submitting update for event id:", currentEventId);
-      console.log("Form values:", {
+      console.log("Values to update:", {
         name: name.value,
         author: author.value,
         description: description.value,
-        date: dateInputValue.value,
+        dates: datesArray,
       });
-      await patchEvent(currentEventId, name.value, author.value, description.value, dateInputValue.value);
+      await patchEvent(
+        currentEventId,
+        name.value,
+        author.value,
+        description.value,
+        datesArray
+      );
     } else {
-      console.log("Creating new event");
       await addNewEvent();
     }
-    await displayEvents();
     resetForm(name, author, description, dateInputValue);
     form.style.visibility = "hidden";
     form.style.opacity = "0";
     form.style.height = "0";
     form.style.padding = "0";
     display = false;
-    currentEventId = null;
-    eventSubmitBtn.innerText = "Create Event";
+    await displayEvents();
   } catch (error) {
-    console.error("Failed to submit event:", error);
+    console.error("Error submitting form:", error);
   }
 });
 
-
-// We reset the form each time we open it, because the Go live extension forces the reload, avoiding us to actually reset the form once the call is done
-function resetForm(nameInput, authorInput, descriptionInput, dateInput) {
-  nameInput.value = "";
-  authorInput.value = "";
-  descriptionInput.value = "";
-  dateInput.value = "";
-  currentEventId = null;
-  eventSubmitBtn.innerText = "Create Event";
-}
-
 // Updating/patching an event
-// We have to add an event to our edit buttons (see the delete ones above) and use the function below - to be adapted of course
-async function patchEvent(eventId, name, author, description, date) {
-  const datesArray = [new Date(date)];
+async function patchEvent(eventId, name, author, description, dates) {
   try {
     console.log("Updating event with id:", eventId);
-    console.log("New values:", { name, author, description, datesArray });
-    await updateEvent(eventId, name, datesArray, author, description);
+    console.log("New values:", { name, author, description, dates });
+    await updateEvent(eventId, name, dates, author, description);
   } catch (error) {
     console.error("Failed to update event:", error);
   }
 }
 
+// Resetting the form to its original state
+function resetForm(nameInput, authorInput, descriptionInput, dateInput) {
+  nameInput.value = "";
+  authorInput.value = "";
+  descriptionInput.value = "";
+  dateInput.value = "";
+  datesArray = [];
+  datesContainer.innerHTML = '';
+  currentEventId = null;
+  eventSubmitBtn.innerText = "Create Event";
+}
 
-// We trigger the function which displays the events once the JS module is loaded
-await displayEvents();
+// Initial load of events
+document.addEventListener("DOMContentLoaded", async () => {
+  await displayEvents();
+});
