@@ -1,7 +1,7 @@
 export async function createEvent(name, dates, author, description) {
     const event = {
         name: name,
-        dates: datesArray.map(date => ({ date: date.toISOString() })),
+        dates: dates,
         author: author,
         description: description
     }
