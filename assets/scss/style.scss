@@ -21,6 +21,11 @@ main {
   display: flex;
   flex-direction: column;
   margin: 0em 4em 0em 3em;
+
+  .error-slot {
+    color: rgb(241, 41, 101);
+    display: none;
+  }
 }
 
 #addEvent {

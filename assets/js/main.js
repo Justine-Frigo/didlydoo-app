@@ -16,7 +16,7 @@ import { updateEvent } from "./modules/PATCH/updateEvent.js";
 ////////// DELETE //////////
 import { deleteEvent } from "./modules/DELETE/deleteEvent.js";
 
-/////////  DARKMODE ////////
+///////// DARKMODE ////////
 import { darkMode } from "./darkmode.js";
 
 ////////// VARIABLES / DOM ELEMENTS //////////
@@ -57,6 +57,7 @@ closeBtn.addEventListener("click", (e) => {
   form.style.height = "0";
   form.style.padding = "0";
   display = false;
+  clearErrorMessages();
 });
 
 let currentEventId = null;
@@ -65,13 +66,10 @@ let currentEventId = null;
 async function displayEvents() {
   const events = await getAllEvents();
   const attendees = await getAllAttendees();
-  console.log("Events after update:", events);
-  console.log(attendees);
 
   const eventsContainer = document.getElementById("events-container");
   eventsContainer.innerHTML = ''; //Clear the container before displaying events
 
-  // Looping over each event to create a card for each
   events.forEach((event) => {
     const eventCard = document.createElement("article");
     const eventCardHeader = document.createElement("section");
@@ -91,7 +89,6 @@ async function displayEvents() {
 
     const dates = event.dates;
 
-    // Looping over each date to append them to their container
     dates.forEach((date) => {
       const dateContainer = document.createElement("div");
       dateContainer.className = "date-availability";
@@ -102,7 +99,6 @@ async function displayEvents() {
 
       const attendees = date.attendees;
 
-      // Looping over each attendee to append them to the date container
       attendees.forEach((attendee) => {
         const attendeeContainer = document.createElement("p");
         attendeeContainer.innerText = attendee.name;
@@ -130,7 +126,6 @@ async function displayEvents() {
     editBtn.innerText = "Edit event";
     eventCard.appendChild(editBtn);
 
-    // Triggering a confirm box before deleting the event
     deleteBtn.addEventListener("click", async (e) => {
       e.preventDefault();
 
@@ -194,76 +189,56 @@ function openEditForm(event) {
   console.log("Editing event:", event);
 }
 
-// Creating a new event
 async function addNewEvent() {
-  const availability = document.getElementById("availability");
-
-  // Sanitizing inputs
-  if (
-    name.value.trim() === "" ||
-    description.value.trim() === "" ||
-    availability.value === "null" ||
-    author.value.trim() === "" ||
-    datesArray.length === 0
-  ) {
-    alert("Please fill in all fields and add at least one date!");
-    return;
-  }
-
-  try {
-    // Actually calling the API to create an event
-    await createEvent(name.value, datesArray, author.value, description.value);
-  } catch (error) {
-    console.error(error);
+  if (validateForm()) {
+    try {
+      await createEvent(name.value.trim(), datesArray, author.value.trim(), description.value.trim());
+      resetForm(name, author, description, dateInputValue);
+      form.style.visibility = "hidden";
+      form.style.opacity = "0";
+      form.style.height = "0";
+      form.style.padding = "0";
+      display = false;
+      await displayEvents();
+    } catch (error) {
+      console.error("Error creating event:", error);
+    }
   }
 }
 
-// Event listener to fire the API call
 eventSubmitBtn.addEventListener("click", async (e) => {
   e.preventDefault();
-  try {
-    if (currentEventId) {
-      console.log("Submitting update for event id:", currentEventId);
-      console.log("Values to update:", {
-        name: name.value,
-        author: author.value,
-        description: description.value,
-        dates: datesArray,
-      });
-      await patchEvent(
-        currentEventId,
-        name.value,
-        author.value,
-        description.value,
-        datesArray
-      );
-    } else {
-      await addNewEvent();
+  if (validateForm()) {
+    try {
+      if (currentEventId) {
+        await patchEvent(currentEventId, name.value.trim(), author.value.trim(), description.value.trim(), datesArray);
+      } else {
+        await addNewEvent();
+      }
+      resetForm(name, author, description, dateInputValue);
+      form.style.visibility = "hidden";
+      form.style.opacity = "0";
+      form.style.height = "0";
+      form.style.padding = "0";
+      display = false;
+      await displayEvents();
+    } catch (error) {
+      console.error("Error submitting form:", error);
     }
-    resetForm(name, author, description, dateInputValue);
-    form.style.visibility = "hidden";
-    form.style.opacity = "0";
-    form.style.height = "0";
-    form.style.padding = "0";
-    display = false;
-    await displayEvents();
-  } catch (error) {
-    console.error("Error submitting form:", error);
   }
 });
 
-// Updating/patching an event
 async function patchEvent(eventId, name, author, description, dates) {
   try {
-    console.log("Updating event with id:", eventId);
-    console.log("New values:", { name, author, description, dates });
-    await updateEvent(eventId, name, dates, author, description);
+    await updateEvent(eventId, name, author, description);
+    if (dates) {
+      await addDates(eventId, dates);
+    }
   } catch (error) {
     console.error("Failed to update event:", error);
   }
 }
 
-// Resetting the form to its original state
 function resetForm(nameInput, authorInput, descriptionInput, dateInput) {
   nameInput.value = "";
   authorInput.value = "";
@@ -273,9 +248,72 @@ function resetForm(nameInput, authorInput, descriptionInput, dateInput) {
   datesContainer.innerHTML = '';
   currentEventId = null;
   eventSubmitBtn.innerText = "Create Event";
+  clearErrorMessages();
 }
 
-// Initial load of events
+async function addAttendanceToEvent(eventId, name, dates, availability) {
+  try {
+    return await addAttendance(eventId, name, dates, availability);
+  } catch (error) {
+    console.error(error);
+  }
+}
+
 document.addEventListener("DOMContentLoaded", async () => {
   await displayEvents();
 });
+
+function validateForm() {
+  clearErrorMessages();
+  let valid = true;
+
+  if (name.value.trim() === "") {
+    showError("name", "Le nom de l'événement est requis.", name);
+    valid = false;
+  }
+
+  if (author.value.trim() === "") {
+    showError("author", "L'auteur est requis.", author);
+    valid = false;
+  }
+
+  if (description.value.trim() === "") {
+    showError("description", "La description est requise.", description);
+    valid = false;
+  }
+
+  if (datesArray.length === 0) {
+    showError("date", "Veuillez ajouter au moins une date.", dateInputValue);
+    valid = false;
+  }
+
+  return valid;
+}
+
+function showError(field, message, input) {
+  const errorElement = document.getElementById(`${field}Error`);
+  if (errorElement) {
+    input.style.border = '1px solid rgb(241, 41, 101)';
+    errorElement.innerText = message;
+    errorElement.style.display = "block";
+  }
+}
+
+function clearErrorMessages() {
+  const errorElements = document.querySelectorAll(".error-slot");
+  const inputsArray = [
+    name,
+    author, 
+    description,
+    dateInputValue 
+  ]
+
+  errorElements.forEach(element => {
+    element.innerText = "";
+    element.style.display = "none";
+  });
+
+  inputsArray.forEach(element => {
+    element.style.border = 'none'
+  })
+}
