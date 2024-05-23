@@ -30,8 +30,16 @@ const dateInputValue = document.getElementById("eventDate");
 const addDateBtn = document.getElementById("addDateBtn");
 const datesContainer = document.getElementById("datesContainer");
 const eventSubmitBtn = document.getElementById("eventSubmit");
+
+const attendanceForm = document.getElementById("attendanceForm");
+const attendeeName = document.getElementById("attendeeName");
+const availability = document.getElementById("availability");
+const attendanceSubmitBtn = document.getElementById("attendanceSubmitBtn");
+const closeAttendanceBtn = document.getElementById("closeAttendanceBtn");
+
 let display = false;
 let datesArray = [];
+let currentEventId = null;
 
 const today = new Date();
 today.setHours(0, 0, 0, 0);
@@ -62,8 +70,6 @@ closeBtn.addEventListener("click", (e) => {
   display = false;
   clearErrorMessages();
 });
-
-let currentEventId = null;
 
 // DISPLAYING EVENTS AS CARDS
 async function displayEvents() {
@@ -100,17 +106,25 @@ async function displayEvents() {
       dateContainer.appendChild(dateValue);
       eventDates.appendChild(dateContainer);
 
-      const attendees = date.attendees;
+      const dateAttendees = date.attendees;
 
-      attendees.forEach((attendee) => {
+      dateAttendees.forEach((attendee) => {
         const attendeeContainer = document.createElement("p");
         attendeeContainer.innerText = attendee.name;
         attendeeContainer.className = attendee.available
           ? "available"
           : "unavailable";
-
         dateContainer.appendChild(attendeeContainer);
       });
+
+      const addAttendeeBtn = document.createElement("button");
+      addAttendeeBtn.className = "addAttendeeBtn";
+      addAttendeeBtn.innerText = "Add/update attendance";
+      addAttendeeBtn.addEventListener("click", (e) => {
+        e.preventDefault();
+        openAttendanceForm(event.id, date.date);
+      });
+      dateContainer.appendChild(addAttendeeBtn);
     });
     eventCard.appendChild(eventDates);
 
@@ -126,7 +140,6 @@ async function displayEvents() {
 
     deleteBtn.addEventListener("click", async (e) => {
       e.preventDefault();
-
       if (confirm("Are you sure you want to delete this event?")) {
         await deleteEvent(event.id);
         await displayEvents();
@@ -148,7 +161,6 @@ addDateBtn.addEventListener("click", (e) => {
   const dateValue = dateInputValue.value;
   if (dateValue) {
     datesArray.push(new Date(dateValue));
-    console.log("coucou");
     displayDates();
   }
 });
@@ -184,8 +196,6 @@ function openEditForm(event) {
 
   currentEventId = event.id;
   eventSubmitBtn.innerText = "Update Event";
-
-  console.log("Editing event:", event);
 }
 
 async function addNewEvent() {
@@ -261,13 +271,63 @@ function resetForm(nameInput, authorInput, descriptionInput, dateInput) {
   clearErrorMessages();
 }
 
-async function addAttendanceToEvent(eventId, name, dates, availability) {
-  try {
-    return await addAttendance(eventId, name, dates, availability);
-  } catch (error) {
-    console.error(error);
-  }
+async function openAttendanceForm(eventId, date) {
+  attendanceForm.style.visibility = "visible";
+  attendanceForm.dataset.eventId = eventId;
+  attendanceForm.dataset.date = date;
+  const eventToAttend = await getEventById(eventId);
+  attendeeName.value = eventToAttend.author ?? '';
 }
+
+
+// At the moment, we can only set the availability for one particular date. We might have to check to add several dates at once by using checkboxes - though nothing mandatory
+attendanceSubmitBtn.addEventListener("click", async (e) => {
+  e.preventDefault();
+  const eventId = attendanceForm.dataset.eventId;
+  console.log('eventid', eventId);
+  const date = attendanceForm.dataset.date;
+  const name = attendeeName.value.trim();
+  const available = availability.value === "true";
+
+  if (name) {
+    try {
+      const existingAttendee = await getAttendeeByName(name);
+      console.log(existingAttendee &&
+        existingAttendee.events &&
+        existingAttendee.events.length > 0)
+      if (
+        existingAttendee &&
+        existingAttendee.events &&
+        existingAttendee.events.length > 0
+      ) {
+        const attendeeForEvent = existingAttendee.events.find(
+          (att) => {
+            return att.id === eventId
+          } 
+        );
+        console.log(attendeeForEvent)
+
+        if (attendeeForEvent) {
+          await updateAttendance(eventId, name, [{ date, available }]);
+        } else {
+          await addAttendance(eventId, name, [{ date, available }]);
+        }
+      } else {
+        await addAttendance(eventId, name, [{ date, available }]);
+      }
+
+      attendanceForm.style.visibility = "hidden";
+      await displayEvents();
+    } catch (error) {
+      console.error("Error updating attendance:", error);
+    }
+  }
+});
+
+closeAttendanceBtn.addEventListener('click', (e) => {
+  e.preventDefault();
+  attendanceForm.style.visibility = "hidden";
+})
 
 document.addEventListener("DOMContentLoaded", async () => {
   await displayEvents();
@@ -294,7 +354,7 @@ function validateForm() {
     valid = false;
   } else if (author.value.length >= 256) {
     showError(
-      "name",
+      "author",
       "Le nom de l'auteur doit faire moins de 256 caractères.",
       author
     );

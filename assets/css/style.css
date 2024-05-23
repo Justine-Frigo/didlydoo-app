@@ -163,7 +163,7 @@ textarea {
   background-color: rgba(255, 255, 255, 0.256);
 }
 
-#form {
+#form, #attendanceForm {
   color: white;
   position: fixed;
   visibility: hidden;
@@ -175,7 +175,7 @@ textarea {
   justify-content: center;
   align-items: center;
 }
-#form .formDisplay {
+#form .formDisplay, #attendanceForm .formDisplay {
   transform: translate(-0.5em);
   text-align: center;
   display: grid;
@@ -186,6 +186,15 @@ textarea {
           backdrop-filter: blur(8px);
   width: 100%;
   height: 100%;
+}
+
+#attendanceForm {
+  height: 20%;
+  position: absolute;
+  top: 100px;
+  left: 0;
+  right: 0;
+  margin: auto;
 }
 
 #events-container,

@@ -1,5 +1,28 @@
 [
   {
+    "id": "2634aa08d13e",
+    "name": "Bar mitzvah des coaches",
+    "author": "Justine",
+    "description": "On va picoler ouaiiiiiis",
+    "dates": [
+      "2024-05-24"
+    ],
+    "created_at": "2024-05-23T20:38:14.512Z",
+    "num_modification": 0,
+    "last_modification": "2024-05-23T20:38:14.512Z",
+    "attendees": [
+      {
+        "name": "Justine",
+        "dates": [
+          {
+            "date": "2024-05-24",
+            "available": true
+          }
+        ]
+      }
+    ]
+  },
+  {
     "id": "f5b6564b5dc4",
     "name": "My sweet 16",
     "description": "I am going to be 16, let us all party together! Help me pick a date so we can go together",
@@ -38,6 +61,15 @@
           {
             "date": "2022-03-21",
             "available": true
+          }
+        ]
+      },
+      {
+        "name": "John Doe",
+        "dates": [
+          {
+            "date": "2022-03-17",
+            "available": false
           }
         ]
       }
