@@ -108,8 +108,25 @@ async function displayEvents() {
 
         dateContainer.appendChild(attendeeContainer);
       });
+      const newAttendee = document.createElement("div");
+      newAttendee.className = "addAttendee";
+      const present = document.createElement("input");
+      present.className = "available";
+      present.setAttribute("type", "checkbox")
+      newAttendee.appendChild(present);
+      const absence = document.createElement("input");
+      absence.className = "unavailable";
+      absence.setAttribute("type", "checkbox")
+      newAttendee.appendChild(absence);
+      newAttendee.setAttribute("style","display:none");
+      dateContainer.appendChild(newAttendee);
     });
     eventCard.appendChild(eventDates);
+
+    const newAttendeeName = document.createElement("input");
+    newAttendeeName.className = "addAttendee";
+    newAttendeeName.setAttribute("style","display:none");
+    eventCard.appendChild(newAttendeeName);
 
     const addAttendeeBtn = document.createElement("button");
     addAttendeeBtn.className = "addAttendeeBtn";
@@ -125,6 +142,11 @@ async function displayEvents() {
     editBtn.className = "editBtn";
     editBtn.innerText = "Edit event";
     eventCard.appendChild(editBtn);
+
+    addAttendeeBtn.addEventListener("click", (e) => {
+      e.preventDefault();
+      changeVisibility("addAttendee");
+    })
 
     deleteBtn.addEventListener("click", async (e) => {
       e.preventDefault();
@@ -142,6 +164,14 @@ async function displayEvents() {
 
     eventsContainer.appendChild(eventCard);
   });
+}
+
+//change visibility
+function changeVisibility (elemName){
+  let element = document.getElementsByClassName(elemName);
+  element.foreach(elem => {
+    elem.style.display = "block";
+  })
 }
 
 // Add date to the list
