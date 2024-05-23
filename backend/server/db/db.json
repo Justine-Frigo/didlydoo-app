@@ -16,6 +16,15 @@
         "dates": [
           {
             "date": "2024-05-24",
+            "available": false
+          }
+        ]
+      },
+      {
+        "name": "Caroline",
+        "dates": [
+          {
+            "date": "2024-05-24",
             "available": true
           }
         ]
