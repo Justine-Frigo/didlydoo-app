@@ -63,16 +63,17 @@ body.darkmode .editBtn {
 body {
   color: black;
   min-height: 100vh;
-  width: 100%;
   position: relative;
   background-color: rgb(236, 237, 248);
   justify-content: center;
 }
 
 main {
-  width: 80%;
+  width: 100%;
   display: flex;
   flex-direction: column;
+  justify-content: center;
+  align-items: center;
   margin: 0em 4em 0em 3em;
 }
 main .error-slot {
