@@ -1,20 +1,5 @@
 [
   {
-    "id": "71ea9a534d58",
-    "name": "test",
-    "author": "test",
-    "description": "123456789",
-    "dates": [
-      "2024-05-23",
-      "2024-05-24",
-      "2024-05-31"
-    ],
-    "created_at": "2024-05-22T18:11:34.108Z",
-    "num_modification": 10,
-    "last_modification": "2024-05-22T18:59:42.260Z",
-    "attendees": []
-  },
-  {
     "id": "f5b6564b5dc4",
     "name": "My sweet 16",
     "description": "I am going to be 16, let us all party together! Help me pick a date so we can go together",

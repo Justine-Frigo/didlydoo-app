@@ -124,8 +124,6 @@ textarea {
   height: 100%;
   top: 0;
   left: 0;
-  backdrop-filter: blur(8px);
-  // z-index: 100;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -137,8 +135,9 @@ textarea {
     gap: 1em;
     background-color: rgba(29, 29, 29, 0.39);
     padding: 5rem;
+    backdrop-filter: blur(8px);
     width: 100%;
-    // height: 100%;
+    height: 100%;
   }
 }
 

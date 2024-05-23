@@ -33,6 +33,9 @@ const eventSubmitBtn = document.getElementById("eventSubmit");
 let display = false;
 let datesArray = [];
 
+const today = new Date();
+today.setHours(0, 0, 0, 0);
+
 // DARK MODE SWITCH
 darkMode();
 
@@ -145,6 +148,7 @@ addDateBtn.addEventListener("click", (e) => {
   const dateValue = dateInputValue.value;
   if (dateValue) {
     datesArray.push(new Date(dateValue));
+    console.log("coucou");
     displayDates();
   }
 });
@@ -154,14 +158,14 @@ function displayDates() {
   datesArray.forEach((date, index) => {
     const dateDiv = document.createElement("div");
     dateDiv.innerText = date.toLocaleDateString("fr-FR");
-    const removeBtn = document.getElementById("removeBtn");
-
+    const removeBtn = document.createElement("button");
+    removeBtn.innerText = "Remove";
     removeBtn.addEventListener("click", () => {
       datesArray.splice(index, 1);
       displayDates();
     });
-    // dateDiv.appendChild(removeBtn);
-    // datesContainer.appendChild(dateDiv);
+    dateDiv.appendChild(removeBtn);
+    datesContainer.appendChild(dateDiv);
   });
 }
 
@@ -276,21 +280,54 @@ function validateForm() {
   if (name.value.trim() === "") {
     showError("name", "Le nom de l'événement est requis.", name);
     valid = false;
+  } else if (name.value.length >= 256) {
+    showError(
+      "name",
+      "Le nom de l'événement doit faire moins de 256 caractères.",
+      name
+    );
+    valid = false;
   }
 
   if (author.value.trim() === "") {
     showError("author", "L'auteur est requis.", author);
+    valid = false;
+  } else if (author.value.length >= 256) {
+    showError(
+      "name",
+      "Le nom de l'auteur doit faire moins de 256 caractères.",
+      author
+    );
     valid = false;
   }
 
   if (description.value.trim() === "") {
     showError("description", "La description est requise.", description);
     valid = false;
+  } else if (description.value.length >= 256) {
+    showError(
+      "description",
+      "La description de l'événement doit faire moins de 256 caractères.",
+      description
+    );
+    valid = false;
   }
 
   if (datesArray.length === 0) {
     showError("date", "Veuillez ajouter au moins une date.", dateInputValue);
     valid = false;
+  } else {
+    for (let date of datesArray) {
+      if (date < today) {
+        showError(
+          "date",
+          "Chaque date doit être ultérieure ou égale à la date d'aujourd'hui.",
+          dateInputValue
+        );
+        valid = false;
+        break;
+      }
+    }
   }
 
   return valid;
