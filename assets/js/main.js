@@ -68,7 +68,7 @@ async function displayEvents() {
   const attendees = await getAllAttendees();
 
   const eventsContainer = document.getElementById("events-container");
-  eventsContainer.innerHTML = ''; //Clear the container before displaying events
+  eventsContainer.innerHTML = ""; //Clear the container before displaying events
 
   events.forEach((event) => {
     const eventCard = document.createElement("article");
@@ -150,12 +150,12 @@ addDateBtn.addEventListener("click", (e) => {
 });
 
 function displayDates() {
-  datesContainer.innerHTML = '';
+  datesContainer.innerHTML = "";
   datesArray.forEach((date, index) => {
     const dateDiv = document.createElement("div");
     dateDiv.innerText = date.toLocaleDateString("fr-FR");
-    const removeBtn = document.createElement("button");
-    removeBtn.innerText = "Remove";
+    const removeBtn = document.getElementById("removeBtn");
+
     removeBtn.addEventListener("click", () => {
       datesArray.splice(index, 1);
       displayDates();
@@ -175,7 +175,7 @@ function openEditForm(event) {
   name.value = event.name;
   author.value = event.author;
   description.value = event.description;
-  datesArray = event.dates.map(date => new Date(date.date));
+  datesArray = event.dates.map((date) => new Date(date.date));
   displayDates();
 
   currentEventId = event.id;
@@ -187,7 +187,12 @@ function openEditForm(event) {
 async function addNewEvent() {
   if (validateForm()) {
     try {
-      await createEvent(name.value.trim(), datesArray, author.value.trim(), description.value.trim());
+      await createEvent(
+        name.value.trim(),
+        datesArray,
+        author.value.trim(),
+        description.value.trim()
+      );
       resetForm(name, author, description, dateInputValue);
       form.style.visibility = "hidden";
       form.style.opacity = "0";
@@ -206,7 +211,13 @@ eventSubmitBtn.addEventListener("click", async (e) => {
   if (validateForm()) {
     try {
       if (currentEventId) {
-        await patchEvent(currentEventId, name.value.trim(), author.value.trim(), description.value.trim(), datesArray);
+        await patchEvent(
+          currentEventId,
+          name.value.trim(),
+          author.value.trim(),
+          description.value.trim(),
+          datesArray
+        );
       } else {
         await addNewEvent();
       }
@@ -240,7 +251,7 @@ function resetForm(nameInput, authorInput, descriptionInput, dateInput) {
   descriptionInput.value = "";
   dateInput.value = "";
   datesArray = [];
-  datesContainer.innerHTML = '';
+  datesContainer.innerHTML = "";
   currentEventId = null;
   eventSubmitBtn.innerText = "Create Event";
   clearErrorMessages();
@@ -288,7 +299,7 @@ function validateForm() {
 function showError(field, message, input) {
   const errorElement = document.getElementById(`${field}Error`);
   if (errorElement) {
-    input.style.border = '1px solid rgb(241, 41, 101)';
+    input.style.border = "1px solid rgb(241, 41, 101)";
     errorElement.innerText = message;
     errorElement.style.display = "block";
   }
@@ -296,19 +307,14 @@ function showError(field, message, input) {
 
 function clearErrorMessages() {
   const errorElements = document.querySelectorAll(".error-slot");
-  const inputsArray = [
-    name,
-    author, 
-    description,
-    dateInputValue 
-  ]
+  const inputsArray = [name, author, description, dateInputValue];
 
-  errorElements.forEach(element => {
+  errorElements.forEach((element) => {
     element.innerText = "";
     element.style.display = "none";
   });
 
-  inputsArray.forEach(element => {
-    element.style.border = 'none'
-  })
+  inputsArray.forEach((element) => {
+    element.style.border = "none";
+  });
 }

@@ -58,12 +58,17 @@
             name="description"
             rows="4"
           ></textarea>
-          <span class="error-slot" id="descriptionError">description error</span>
+          <span class="error-slot" id="descriptionError"
+            >description error</span
+          >
           <label for="date" class="darkmode">Date :</label>
           <input type="date" id="eventDate" name="eventDate" />
           <span class="error-slot" id="dateError">date error</span>
           <button class="button" class="darkmode" id="addDateBtn">
             <span class="text" class="darkmode">Add Date</span>
+          </button>
+          <button class="button" class="darkmode" id="removeBtn">
+            <span class="text" class="darkmode">Remove</span>
           </button>
           <div id="datesContainer"></div>
           <label for="availability">Availability :</label>

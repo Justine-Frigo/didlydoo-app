@@ -72,7 +72,7 @@ main {
 button {
   align-items: center;
   background-image: $bckImgBtn;
-  color: white;
+  color: black;
   border: none;
   border-radius: 8px;
   box-shadow: $boxShadowBtn;
@@ -88,6 +88,7 @@ button {
 
   &:hover {
     background-color: rgb(29, 29, 29);
+    cursor: pointer;
   }
   &:active {
     outline: 0;
@@ -116,6 +117,7 @@ textarea {
 }
 
 #form {
+  color: white;
   position: absolute;
   visibility: hidden;
   width: 100%;
@@ -154,7 +156,7 @@ textarea {
 }
 
 .available {
-  color: rgb(131, 196, 210);
+  color: rgb(97, 177, 196);
 }
 
 .unavailable {
@@ -169,11 +171,12 @@ textarea {
   margin: 2em 0em 2em 0em;
 }
 
-.deleteBtn {
-  margin: 0em 3em 1em 3em;
-}
+.deleteBtn,
 .editBtn {
   margin: 0em 3em 1em 3em;
+  &:hover {
+    cursor: pointer;
+  }
 }
 
 @media screen and (min-width: 480px) {
