@@ -160,8 +160,8 @@ function displayDates() {
       datesArray.splice(index, 1);
       displayDates();
     });
-    dateDiv.appendChild(removeBtn);
-    datesContainer.appendChild(dateDiv);
+    // dateDiv.appendChild(removeBtn);
+    // datesContainer.appendChild(dateDiv);
   });
 }
 
