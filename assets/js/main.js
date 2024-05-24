@@ -116,30 +116,38 @@ async function displayEvents() {
           : "unavailable";
         dateContainer.appendChild(attendeeContainer);
       });
-      const newAttendee = document.createElement("div");
-      newAttendee.className = "addAttendee";
-      const present = document.createElement("input");
-      present.className = "available";
-      present.setAttribute("type", "checkbox")
-      newAttendee.appendChild(present);
-      const absence = document.createElement("input");
-      absence.className = "unavailable";
-      absence.setAttribute("type", "checkbox")
-      newAttendee.appendChild(absence);
-      newAttendee.setAttribute("style","display:none");
-      dateContainer.appendChild(newAttendee);
+      // const newAttendee = document.createElement("div");
+      // newAttendee.className = "addAttendee";
+      // const present = document.createElement("input");
+      // present.className = "available";
+      // present.setAttribute("type", "checkbox")
+      // newAttendee.appendChild(present);
+      // const absence = document.createElement("input");
+      // absence.className = "unavailable";
+      // absence.setAttribute("type", "checkbox")
+      // newAttendee.appendChild(absence);
+      // newAttendee.setAttribute("style","display:none");
+      // dateContainer.appendChild(newAttendee);
+      const addAttendeeBtn = document.createElement("button");
+      addAttendeeBtn.className = "addAttendeeBtn";
+      addAttendeeBtn.innerText = "Add/update attendance";
+      addAttendeeBtn.addEventListener("click", (e) => {
+        e.preventDefault();
+        openAttendanceForm(event.id, date.date);
+      });
+      dateContainer.appendChild(addAttendeeBtn);
     });
     eventCard.appendChild(eventDates);
 
-    const newAttendeeName = document.createElement("input");
-    newAttendeeName.className = "addAttendee";
-    newAttendeeName.setAttribute("style","display:none");
-    eventCard.appendChild(newAttendeeName);
+    // const newAttendeeName = document.createElement("input");
+    // newAttendeeName.className = "addAttendee";
+    // newAttendeeName.setAttribute("style","display:none");
+    // eventCard.appendChild(newAttendeeName);
 
-    const addAttendeeBtn = document.createElement("button");
-    addAttendeeBtn.className = "addAttendeeBtn";
-    addAttendeeBtn.innerText = "add attendance";
-    eventCard.appendChild(addAttendeeBtn);
+    // const addAttendeeBtn = document.createElement("button");
+    // addAttendeeBtn.className = "addAttendeeBtn";
+    // addAttendeeBtn.innerText = "add attendance";
+    // eventCard.appendChild(addAttendeeBtn);
 
     const deleteBtn = document.createElement("button");
     deleteBtn.className = "deleteBtn";
@@ -151,10 +159,10 @@ async function displayEvents() {
     editBtn.innerText = "Edit event";
     eventCard.appendChild(editBtn);
 
-    addAttendeeBtn.addEventListener("click", (e) => {
-      e.preventDefault();
-      changeVisibility("addAttendee");
-    })
+    // addAttendeeBtn.addEventListener("click", (e) => {
+    //   e.preventDefault();
+    //   changeVisibility("addAttendee");
+    // })
 
     deleteBtn.addEventListener("click", async (e) => {
       e.preventDefault();
@@ -174,13 +182,13 @@ async function displayEvents() {
 }
 
 //change visibility
-function changeVisibility (elemName){
+// function changeVisibility (elemName){
   
-  let element = document.getElementsByClassName(elemName);
-  for (let i = 0 ; i < element.length; i++){
-    element[i].style.display = "block";
-  }
-}
+//   let element = document.getElementsByClassName(elemName);
+//   for (let i = 0 ; i < element.length; i++){
+//     element[i].style.display = "block";
+//   }
+// }
 
 // Add date to the list
 addDateBtn.addEventListener("click", (e) => {
