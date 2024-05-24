@@ -10,16 +10,18 @@
 body {
   color: black;
   min-height: 100vh;
-  width: 100%;
+  // width: 100%;
   position: relative;
   background-color: rgb(236, 237, 248);
   justify-content: center;
 }
 
 main {
-  width: 80%;
+  width: 100%;
   display: flex;
   flex-direction: column;
+  justify-content: center;
+  align-items: center;
   margin: 0em 4em 0em 3em;
 
   .error-slot {
@@ -116,7 +118,7 @@ textarea {
   background-color: rgba(255, 255, 255, 0.256);
 }
 
-#form {
+#form, #attendanceForm {
   color: white;
   position: fixed;
   visibility: hidden;
@@ -124,8 +126,6 @@ textarea {
   height: 100%;
   top: 0;
   left: 0;
-  backdrop-filter: blur(8px);
-  // z-index: 100;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -137,9 +137,19 @@ textarea {
     gap: 1em;
     background-color: rgba(29, 29, 29, 0.39);
     padding: 5rem;
+    backdrop-filter: blur(8px);
     width: 100%;
-    // height: 100%;
+    height: 100%;
   }
+}
+
+#attendanceForm {
+  height: 20%;
+  position: absolute;
+  top: 100px;
+  left: 0;
+  right: 0;
+  margin: auto;
 }
 
 #events-container,
