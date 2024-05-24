@@ -49,11 +49,17 @@ body.darkmode #addEvent {
 body.darkmode #addEvent span {
   background-color: black;
 }
+body.darkmode #addEvent span:hover {
+  background: none;
+}
 body.darkmode button {
   color: white;
 }
 body.darkmode button span {
   background-color: black;
+}
+body.darkmode button span:hover {
+  background: none;
 }
 body.darkmode .deleteBtn,
 body.darkmode .editBtn {
