@@ -168,10 +168,11 @@ async function displayEvents() {
 
 //change visibility
 function changeVisibility (elemName){
+  
   let element = document.getElementsByClassName(elemName);
-  element.foreach(elem => {
-    elem.style.display = "block";
-  })
+  for (let i = 0 ; i < element.length; i++){
+    element[i].style.display = "block";
+  }
 }
 
 // Add date to the list
