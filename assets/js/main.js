@@ -30,8 +30,19 @@ const dateInputValue = document.getElementById("eventDate");
 const addDateBtn = document.getElementById("addDateBtn");
 const datesContainer = document.getElementById("datesContainer");
 const eventSubmitBtn = document.getElementById("eventSubmit");
+
+const attendanceForm = document.getElementById("attendanceForm");
+const attendeeName = document.getElementById("attendeeName");
+const availability = document.getElementById("availability");
+const attendanceSubmitBtn = document.getElementById("attendanceSubmitBtn");
+const closeAttendanceBtn = document.getElementById("closeAttendanceBtn");
+
 let display = false;
 let datesArray = [];
+let currentEventId = null;
+
+const today = new Date();
+today.setHours(0, 0, 0, 0);
 
 // DARK MODE SWITCH
 darkMode();
@@ -60,15 +71,13 @@ closeBtn.addEventListener("click", (e) => {
   clearErrorMessages();
 });
 
-let currentEventId = null;
-
 // DISPLAYING EVENTS AS CARDS
 async function displayEvents() {
   const events = await getAllEvents();
   const attendees = await getAllAttendees();
 
   const eventsContainer = document.getElementById("events-container");
-  eventsContainer.innerHTML = ''; //Clear the container before displaying events
+  eventsContainer.innerHTML = ""; //Clear the container before displaying events
 
   events.forEach((event) => {
     const eventCard = document.createElement("article");
@@ -97,15 +106,14 @@ async function displayEvents() {
       dateContainer.appendChild(dateValue);
       eventDates.appendChild(dateContainer);
 
-      const attendees = date.attendees;
+      const dateAttendees = date.attendees;
 
-      attendees.forEach((attendee) => {
+      dateAttendees.forEach((attendee) => {
         const attendeeContainer = document.createElement("p");
         attendeeContainer.innerText = attendee.name;
         attendeeContainer.className = attendee.available
           ? "available"
           : "unavailable";
-
         dateContainer.appendChild(attendeeContainer);
       });
       const newAttendee = document.createElement("div");
@@ -150,7 +158,6 @@ async function displayEvents() {
 
     deleteBtn.addEventListener("click", async (e) => {
       e.preventDefault();
-
       if (confirm("Are you sure you want to delete this event?")) {
         await deleteEvent(event.id);
         await displayEvents();
@@ -186,7 +193,7 @@ addDateBtn.addEventListener("click", (e) => {
 });
 
 function displayDates() {
-  datesContainer.innerHTML = '';
+  datesContainer.innerHTML = "";
   datesArray.forEach((date, index) => {
     const dateDiv = document.createElement("div");
     dateDiv.innerText = date.toLocaleDateString("fr-FR");
@@ -211,19 +218,22 @@ function openEditForm(event) {
   name.value = event.name;
   author.value = event.author;
   description.value = event.description;
-  datesArray = event.dates.map(date => new Date(date.date));
+  datesArray = event.dates.map((date) => new Date(date.date));
   displayDates();
 
   currentEventId = event.id;
   eventSubmitBtn.innerText = "Update Event";
-
-  console.log("Editing event:", event);
 }
 
 async function addNewEvent() {
   if (validateForm()) {
     try {
-      await createEvent(name.value.trim(), datesArray, author.value.trim(), description.value.trim());
+      await createEvent(
+        name.value.trim(),
+        datesArray,
+        author.value.trim(),
+        description.value.trim()
+      );
       resetForm(name, author, description, dateInputValue);
       form.style.visibility = "hidden";
       form.style.opacity = "0";
@@ -242,7 +252,13 @@ eventSubmitBtn.addEventListener("click", async (e) => {
   if (validateForm()) {
     try {
       if (currentEventId) {
-        await patchEvent(currentEventId, name.value.trim(), author.value.trim(), description.value.trim(), datesArray);
+        await patchEvent(
+          currentEventId,
+          name.value.trim(),
+          author.value.trim(),
+          description.value.trim(),
+          datesArray
+        );
       } else {
         await addNewEvent();
       }
@@ -276,19 +292,69 @@ function resetForm(nameInput, authorInput, descriptionInput, dateInput) {
   descriptionInput.value = "";
   dateInput.value = "";
   datesArray = [];
-  datesContainer.innerHTML = '';
+  datesContainer.innerHTML = "";
   currentEventId = null;
   eventSubmitBtn.innerText = "Create Event";
   clearErrorMessages();
 }
 
-async function addAttendanceToEvent(eventId, name, dates, availability) {
-  try {
-    return await addAttendance(eventId, name, dates, availability);
-  } catch (error) {
-    console.error(error);
-  }
+async function openAttendanceForm(eventId, date) {
+  attendanceForm.style.visibility = "visible";
+  attendanceForm.dataset.eventId = eventId;
+  attendanceForm.dataset.date = date;
+  const eventToAttend = await getEventById(eventId);
+  attendeeName.value = eventToAttend.author ?? '';
 }
+
+
+// At the moment, we can only set the availability for one particular date. We might have to check to add several dates at once by using checkboxes - though nothing mandatory
+attendanceSubmitBtn.addEventListener("click", async (e) => {
+  e.preventDefault();
+  const eventId = attendanceForm.dataset.eventId;
+  console.log('eventid', eventId);
+  const date = attendanceForm.dataset.date;
+  const name = attendeeName.value.trim();
+  const available = availability.value === "true";
+
+  if (name) {
+    try {
+      const existingAttendee = await getAttendeeByName(name);
+      console.log(existingAttendee &&
+        existingAttendee.events &&
+        existingAttendee.events.length > 0)
+      if (
+        existingAttendee &&
+        existingAttendee.events &&
+        existingAttendee.events.length > 0
+      ) {
+        const attendeeForEvent = existingAttendee.events.find(
+          (att) => {
+            return att.id === eventId
+          } 
+        );
+        console.log(attendeeForEvent)
+
+        if (attendeeForEvent) {
+          await updateAttendance(eventId, name, [{ date, available }]);
+        } else {
+          await addAttendance(eventId, name, [{ date, available }]);
+        }
+      } else {
+        await addAttendance(eventId, name, [{ date, available }]);
+      }
+
+      attendanceForm.style.visibility = "hidden";
+      await displayEvents();
+    } catch (error) {
+      console.error("Error updating attendance:", error);
+    }
+  }
+});
+
+closeAttendanceBtn.addEventListener('click', (e) => {
+  e.preventDefault();
+  attendanceForm.style.visibility = "hidden";
+})
 
 document.addEventListener("DOMContentLoaded", async () => {
   await displayEvents();
@@ -301,21 +367,54 @@ function validateForm() {
   if (name.value.trim() === "") {
     showError("name", "Le nom de l'événement est requis.", name);
     valid = false;
+  } else if (name.value.length >= 256) {
+    showError(
+      "name",
+      "Le nom de l'événement doit faire moins de 256 caractères.",
+      name
+    );
+    valid = false;
   }
 
   if (author.value.trim() === "") {
     showError("author", "L'auteur est requis.", author);
+    valid = false;
+  } else if (author.value.length >= 256) {
+    showError(
+      "author",
+      "Le nom de l'auteur doit faire moins de 256 caractères.",
+      author
+    );
     valid = false;
   }
 
   if (description.value.trim() === "") {
     showError("description", "La description est requise.", description);
     valid = false;
+  } else if (description.value.length >= 256) {
+    showError(
+      "description",
+      "La description de l'événement doit faire moins de 256 caractères.",
+      description
+    );
+    valid = false;
   }
 
   if (datesArray.length === 0) {
     showError("date", "Veuillez ajouter au moins une date.", dateInputValue);
     valid = false;
+  } else {
+    for (let date of datesArray) {
+      if (date < today) {
+        showError(
+          "date",
+          "Chaque date doit être ultérieure ou égale à la date d'aujourd'hui.",
+          dateInputValue
+        );
+        valid = false;
+        break;
+      }
+    }
   }
 
   return valid;
@@ -324,7 +423,7 @@ function validateForm() {
 function showError(field, message, input) {
   const errorElement = document.getElementById(`${field}Error`);
   if (errorElement) {
-    input.style.border = '1px solid rgb(241, 41, 101)';
+    input.style.border = "1px solid rgb(241, 41, 101)";
     errorElement.innerText = message;
     errorElement.style.display = "block";
   }
@@ -332,19 +431,14 @@ function showError(field, message, input) {
 
 function clearErrorMessages() {
   const errorElements = document.querySelectorAll(".error-slot");
-  const inputsArray = [
-    name,
-    author, 
-    description,
-    dateInputValue 
-  ]
+  const inputsArray = [name, author, description, dateInputValue];
 
-  errorElements.forEach(element => {
+  errorElements.forEach((element) => {
     element.innerText = "";
     element.style.display = "none";
   });
 
-  inputsArray.forEach(element => {
-    element.style.border = 'none'
-  })
+  inputsArray.forEach((element) => {
+    element.style.border = "none";
+  });
 }

@@ -58,7 +58,9 @@
             name="description"
             rows="4"
           ></textarea>
-          <span class="error-slot" id="descriptionError">description error</span>
+          <span class="error-slot" id="descriptionError"
+            >description error</span
+          >
           <label for="date" class="darkmode">Date :</label>
           <input type="date" id="eventDate" name="eventDate" />
           <span class="error-slot" id="dateError">date error</span>
@@ -67,14 +69,28 @@
           </button>
           <div id="datesContainer"></div>
           <label for="availability">Availability :</label>
-          <select id="availability">
-            <option value="true">Yes</option>
-            <option value="false">No</option>
-          </select>
           <button class="button" class="darkmode" id="eventSubmit">
             <span class="text" class="darkmode">Create event</span>
           </button>
           <button class="button" class="darkmode" id="closeBtn">
+            <span class="text" class="darkmode">Close</span>
+          </button>
+        </form>
+      </section>
+      <section id="attendanceForm">
+        <form class="formDisplay">
+          <label for="attendeeName">Name:</label>
+          <input type="text" id="attendeeName" required />
+
+          <label for="availability">Availability:</label>
+          <select id="availability">
+            <option value="null" selected hidden>Pick an option</option>
+            <option value="true">Available</option>
+            <option value="false">Unavailable</option>
+          </select>
+
+          <button type="submit" id="attendanceSubmitBtn">Add attendance</button>
+          <button class="button" class="darkmode" id="closeAttendanceBtn">
             <span class="text" class="darkmode">Close</span>
           </button>
         </form>
