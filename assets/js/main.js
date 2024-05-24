@@ -116,27 +116,6 @@ async function displayEvents() {
           : "unavailable";
         dateContainer.appendChild(attendeeContainer);
       });
-<<<<<<< HEAD
-      //   const newAttendee = document.createElement("div");
-      //   newAttendee.className = "addAttendee";
-      //   const present = document.createElement("input");
-      //   present.className = "available";
-      //   present.setAttribute("type", "checkbox");
-      //   newAttendee.appendChild(present);
-      //   const absence = document.createElement("input");
-      //   absence.className = "unavailable";
-      //   absence.setAttribute("type", "checkbox");
-      //   newAttendee.appendChild(absence);
-      //   newAttendee.setAttribute("style", "display:none");
-      //   dateContainer.appendChild(newAttendee);
-    });
-    eventCard.appendChild(eventDates);
-
-    const newAttendeeName = document.createElement("input");
-    newAttendeeName.className = "addAttendee";
-    newAttendeeName.setAttribute("style", "display:none");
-    eventCard.appendChild(newAttendeeName);
-=======
       // const newAttendee = document.createElement("div");
       // newAttendee.className = "addAttendee";
       // const present = document.createElement("input");
@@ -164,7 +143,6 @@ async function displayEvents() {
     // newAttendeeName.className = "addAttendee";
     // newAttendeeName.setAttribute("style","display:none");
     // eventCard.appendChild(newAttendeeName);
->>>>>>> dev
 
     // const addAttendeeBtn = document.createElement("button");
     // addAttendeeBtn.className = "addAttendeeBtn";
@@ -181,17 +159,10 @@ async function displayEvents() {
     editBtn.innerText = "Edit event";
     eventCard.appendChild(editBtn);
 
-<<<<<<< HEAD
-    addAttendeeBtn.addEventListener("click", (e) => {
-      e.preventDefault();
-      changeVisibility("addAttendee");
-    });
-=======
     // addAttendeeBtn.addEventListener("click", (e) => {
     //   e.preventDefault();
     //   changeVisibility("addAttendee");
     // })
->>>>>>> dev
 
     deleteBtn.addEventListener("click", async (e) => {
       e.preventDefault();
@@ -211,22 +182,13 @@ async function displayEvents() {
 }
 
 //change visibility
-<<<<<<< HEAD
-function changeVisibility(elemName) {
-  let element = document.getElementsByClassName(elemName);
-  for (let i = 0; i < element.length; i++) {
-    element[i].style.display = "block";
-  }
-}
-=======
 // function changeVisibility (elemName){
-  
+
 //   let element = document.getElementsByClassName(elemName);
 //   for (let i = 0 ; i < element.length; i++){
 //     element[i].style.display = "block";
 //   }
 // }
->>>>>>> dev
 
 // Add date to the list
 addDateBtn.addEventListener("click", (e) => {
@@ -243,14 +205,14 @@ function displayDates() {
   datesArray.forEach((date, index) => {
     const dateDiv = document.createElement("div");
     dateDiv.innerText = date.toLocaleDateString("fr-FR");
-    const removeBtn = document.getElementById("removeBtn");
-
+    const removeBtn = document.createElement("button");
+    removeBtn.innerText = "Remove";
     removeBtn.addEventListener("click", () => {
       datesArray.splice(index, 1);
       displayDates();
     });
-    // dateDiv.appendChild(removeBtn);
-    // datesContainer.appendChild(dateDiv);
+    dateDiv.appendChild(removeBtn);
+    datesContainer.appendChild(dateDiv);
   });
 }
 
